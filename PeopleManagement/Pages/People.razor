@@ -1,0 +1,58 @@
+﻿@page "/People"
+
+@using DataAccess
+@using DataAccess.Models
+@using PeopleManagement.Models
+
+@*j'accède a ma DB*@
+@inject IPeopleData _db
+
+
+<h1>The Employees</h1>
+
+@if(people is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email Adress</th>
+                <th>Current position</th>
+                <th>Years of experience</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var person in people)
+            {
+                <tr>
+                    <th>@person.FirstName</th>
+                    <th>@person.LastName</th>
+                    <th>@person.EmailAddress</th>
+                    <th>@person.JobTitle</th>
+                    <th>@person.YearsOfExperience</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+
+@code {
+
+    private List<PersonModel> people;
+    // j'initie directement newPerson
+    
+    protected override async Task OnInitializedAsync()
+    {
+        //je vais attendre acceder a ma DB via ma _db puis mettre les informations dans people.
+        people = await _db.GetPeople();
+    }
+
+}
